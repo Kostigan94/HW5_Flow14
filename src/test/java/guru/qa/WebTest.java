@@ -23,7 +23,7 @@ public class WebTest {
     }
 
     @ValueSource(strings = {"Стул"})
-    @ParameterizedTest
+
     void commonSearchTest(String testData) {
         open("https://www.ikea.com/ru/ru/");
         $(".search-field__input").setValue(testData).pressEnter();
@@ -50,7 +50,7 @@ public class WebTest {
     }
 
     @MethodSource("dataProviderForSelenideSiteMenuTest")
-    @ParameterizedTest(name = "Для локали {0} отображаются кнопки {1}")
+    @ParameterizedTest(name = "Для запроса {0} отображаются кнопки {1}")
     void selenideSiteMenuTest(String furniture, List<String> expectedButtons) {
         open("https://selenide.org/");
         open("https://www.ikea.com/ru/ru/");

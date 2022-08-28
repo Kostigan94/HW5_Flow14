@@ -8,11 +8,9 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
-
 import java.util.List;
 import java.util.stream.Stream;
 import static com.codeborne.selenide.Condition.text;
-
 import static com.codeborne.selenide.Selenide.*;
 
 public class WebTest {
@@ -22,12 +20,13 @@ public class WebTest {
         Configuration.browser = "chrome";
     }
 
-    @ValueSource(strings = {"Стул"})
-
-    void commonSearchTest(String testData) {
+    @ValueSource(strings = {"Стул","Диван"})
+    @ParameterizedTest
+     void commonSearchTest(String testData) {
         open("https://www.ikea.com/ru/ru/");
         $(".search-field__input").setValue(testData).pressEnter();
-        $(".header-section__title").shouldHave(text("ADDE АДДЕ"));
+        $(".hnf-header__nav__main").shouldHave(text("Товары"));
+        $(".hnf-header__nav__main").shouldHave(text("Комнаты"));
     }
 
     @CsvSource(value = {
@@ -41,7 +40,6 @@ public class WebTest {
         $$(".search-summary__message").shouldHave(CollectionCondition.itemWithText(expectedResult));
     }
 
-
     static Stream<Arguments> dataProviderForSelenideSiteMenuTest() {
         return Stream.of(
                 Arguments.of("Стул", List.of("Сортировать \r Категория \r Цвет \r  Цена \r Материал  \r Размер \r Свойства")),
@@ -52,7 +50,6 @@ public class WebTest {
     @MethodSource("dataProviderForSelenideSiteMenuTest")
     @ParameterizedTest(name = "Для запроса {0} отображаются кнопки {1}")
     void selenideSiteMenuTest(String furniture, List<String> expectedButtons) {
-        open("https://selenide.org/");
         open("https://www.ikea.com/ru/ru/");
         $(".search-field__input").setValue(furniture).pressEnter();
         $$(".filter-options").shouldHave(CollectionCondition.texts(expectedButtons));
